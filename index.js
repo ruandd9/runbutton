@@ -1,15 +1,12 @@
 // Array de perguntas
 const questions = [
-    "Você me ama?",
-    "Tem certeza que não?",
-    "Sério mesmo?",
-    "Pensa bem...",
-    "Última chance!",
-    "Não vai se arrepender?",
-    "Por favor? 🥺",
-    "Reconsidere sua decisão!",
-    "Mesmo? 😢",
-    "Volta aqui!"
+    "A Karina e uma pessoa humilde?",
+    "Ela e uma Pessoa legal?",
+    "Sou egocentrico?",
+    "Vai aplicar um armlock em mim? 😰",
+    "Vai passar minha guarda hj? 🥋",
+    "Admite que muay thai! > jiujitsu  🤼",
+    "Última chance antes do mata leão! 😵"
 ];
 
 let currentQuestionIndex = 0;
