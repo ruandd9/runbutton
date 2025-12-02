@@ -37,33 +37,55 @@ if (!yesButton) {
             e.preventDefault();
             moveCount++;
             
-            // Obter dimensões do botão
+            // Obter dimensões do botão e da tela
             const buttonWidth = yesButton.offsetWidth;
             const buttonHeight = yesButton.offsetHeight;
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
             
-            // Definir margens seguras
-            const margin = 20;
-            const topMargin = 150; // Espaço para o título
-            const bottomMargin = 150; // Espaço para não sair da tela
+            // Margens seguras mais conservadoras
+            const sideMargin = 30; // Margem lateral
+            const topMargin = 120; // Espaço para o título
+            const bottomMargin = 120; // Espaço inferior
             
-            // Calcular área disponível para movimento
-            const availableWidth = window.innerWidth - buttonWidth - (margin * 2);
-            const availableHeight = window.innerHeight - buttonHeight - topMargin - bottomMargin;
+            // Calcular limites seguros (área onde o botão pode estar)
+            const minX = sideMargin;
+            const maxX = screenWidth - buttonWidth - sideMargin;
+            const minY = topMargin;
+            const maxY = screenHeight - buttonHeight - bottomMargin;
             
-            // Gerar deslocamento aleatório dentro dos limites
-            // Centralizado em 0, então vai de -metade a +metade da área disponível
-            const maxOffsetX = availableWidth / 2;
-            const maxOffsetY = availableHeight / 2;
+            // Obter posição central do container (posição inicial do botão)
+            const container = yesButton.parentElement.getBoundingClientRect();
+            const containerCenterX = container.left + container.width / 2;
+            const containerCenterY = container.top + container.height / 2;
             
-            let newOffsetX, newOffsetY;
+            // Calcular posição atual do botão na tela
+            const currentX = containerCenterX + currentOffsetX;
+            const currentY = containerCenterY + currentOffsetY;
+            
+            // Gerar nova posição aleatória dentro dos limites seguros
+            let newX, newY, newOffsetX, newOffsetY;
+            let attempts = 0;
+            
             do {
-                newOffsetX = (Math.random() - 0.5) * availableWidth;
-                newOffsetY = (Math.random() - 0.5) * availableHeight;
+                // Gerar posição aleatória dentro da área segura
+                newX = minX + Math.random() * (maxX - minX);
+                newY = minY + Math.random() * (maxY - minY);
+                
+                // Calcular offset necessário para chegar nessa posição
+                newOffsetX = newX - containerCenterX + (buttonWidth / 2);
+                newOffsetY = newY - containerCenterY + (buttonHeight / 2);
+                
+                attempts++;
+                
+                // Garantir movimento mínimo de 100px ou após 10 tentativas aceitar qualquer posição
             } while (
-                Math.abs(newOffsetX - currentOffsetX) < 80 && 
-                Math.abs(newOffsetY - currentOffsetY) < 80
-            ); // Garantir movimento mínimo de 80px
+                attempts < 10 &&
+                Math.abs(newX - currentX) < 100 && 
+                Math.abs(newY - currentY) < 100
+            );
             
+            // Atualizar posição atual
             currentOffsetX = newOffsetX;
             currentOffsetY = newOffsetY;
             
